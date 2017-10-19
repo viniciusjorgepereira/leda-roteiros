@@ -99,7 +99,7 @@ public class RepositorioProdutoPerecivelArray {
 	public void atualizar(ProdutoPerecivel produto) {
 		boolean atualizou = false;
 		for (int i = 0; i < produtos.length; i++) {
-			if (produtos[i].getCodigo() == produto.getCodigo()) {
+			if (produtos[i] != null && produtos[i].getCodigo() == produto.getCodigo()) {
 				produtos[i] = produto;
 				atualizou = true;
 			}

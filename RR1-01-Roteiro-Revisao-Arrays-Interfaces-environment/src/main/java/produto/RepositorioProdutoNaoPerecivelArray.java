@@ -101,7 +101,7 @@ public class RepositorioProdutoNaoPerecivelArray {
 	public void atualizar(ProdutoNaoPerecivel produto) {
 		boolean atualizou = false;
 		for (int i = 0; i < produtos.length; i++) {
-			if (produtos[i].getCodigo() == produto.getCodigo()) {
+			if (produtos[i] != null && produtos[i].getCodigo() == produto.getCodigo()) {
 				produtos[i] = produto;
 				atualizou = true;
 			}
