@@ -42,8 +42,14 @@ public class RepositorioProdutoPerecivelArray {
 	 * @return
 	 */
 	private int procurarIndice(int codigo) {
-		// TODO Implement your code here
-		throw new UnsupportedOperationException("Not implemented yet!");
+		int i = 0;
+		while (i < produtos.length && produtos[i].getCodigo() != codigo) {
+			i += 1;
+		}
+		if (i == produtos.length) {
+			i = -1;
+		}
+		return i;
 	}
 
 	/**
@@ -53,26 +59,54 @@ public class RepositorioProdutoPerecivelArray {
 	 * @return
 	 */
 	public boolean existe(int codigo) {
-		// TODO Implement your code here
-		throw new UnsupportedOperationException("Not implemented yet!");
+		boolean existe = false;
+		for (int i = 0; i < produtos.length; i++) {
+			if (produtos[i].getCodigo() == codigo) {
+				existe = true;
+			}
+		}
+		return existe;
 	}
 
 	/**
 	 * Insere um novo produto (sem se preocupar com duplicatas)
 	 */
 	public void inserir(ProdutoPerecivel produto) {
-		// TODO Implement your code here
-		throw new UnsupportedOperationException("Not implemented yet!");
+		int i = 0;
+		while(i < produtos.length && produtos[i] != null) {
+			i += 1;
+		}
+		if (i == produtos.length) {
+			expandir();
+			i += 1;
+		}
+		this.produtos[i] = produto;
+		this.index += 1;
 	}
 
+	private void expandir() {
+		ProdutoPerecivel[] novo = new ProdutoPerecivel[produtos.length * 2];
+		for (int i = 0; i < produtos.length; i++) {
+			novo[i] = this.produtos[i];
+		}
+		this.produtos = novo;
+	}
 	/**
 	 * Atualiza um produto armazenado ou retorna um erro caso o produto nao
 	 * esteja no array. Note que, para localizacao, o código do produto será
 	 * utilizado.
 	 */
 	public void atualizar(ProdutoPerecivel produto) {
-		// TODO Implement your code here
-		throw new UnsupportedOperationException("Not implemented yet!");
+		boolean atualizou = false;
+		for (int i = 0; i < produtos.length; i++) {
+			if (produtos[i].getCodigo() == produto.getCodigo()) {
+				produtos[i] = produto;
+				atualizou = true;
+			}
+		}
+		if (!atualizou) {
+			throw new RuntimeException();
+		}
 	}
 
 	/**
@@ -83,10 +117,29 @@ public class RepositorioProdutoPerecivelArray {
 	 * @param codigo
 	 */
 	public void remover(int codigo) {
-		// TODO Implement your code here
-		throw new UnsupportedOperationException("Not implemented yet!");
+		int i = 0;
+		while (i < produtos.length && produtos[i].getCodigo() != codigo) {
+			i += 1;
+		}
+		if (i == produtos.length) {
+			throw new RuntimeException();
+		}
+		produtos[i] = null;
+		organizar();
+		this.index -= 1;
 	}
 
+	private void organizar() {
+		int i = 0;
+		while(i < produtos.length && produtos[i] != null) {
+			i += 1;
+		}
+		produtos[i] = produtos[i + 1];
+		for (int j = i + 1; j < produtos.length - 1; j++) {
+			produtos[j] = produtos[j + 1];
+		}
+	}
+	
 	/**
 	 * Retorna um produto com determinado codigo ou entao um erro, caso o
 	 * produto nao esteja armazenado
@@ -95,7 +148,13 @@ public class RepositorioProdutoPerecivelArray {
 	 * @return
 	 */
 	public ProdutoPerecivel procurar(int codigo) {
-		// TODO Implement your code here
-		throw new UnsupportedOperationException("Not implemented yet!");
+		int i = 0;
+		while (i < produtos.length && produtos[i].getCodigo() != codigo) {
+			i += 1;
+		}
+		if (i == produtos.length) {
+			throw new RuntimeException();
+		}
+		return produtos[i];
 	}
 }

@@ -1,14 +1,14 @@
 package produto;
 
 /**
- * Classe que representa um repositório de produtos usando arrays como estrutura
- * sobrejacente. Alguns métodos (atualizar, remover e procurar) ou executam com
- * sucesso ou retornam um erro. Para o caso desde exercício, o erro será
- * representado por uma RuntimeException que não precisa ser declarada na
+ * Classe que representa um repositÃ³rio de produtos usando arrays como estrutura
+ * sobrejacente. Alguns mÃ©todos (atualizar, remover e procurar) ou executam com
+ * sucesso ou retornam um erro. Para o caso desde exercÃ­cio, o erro serÃ¡
+ * representado por uma RuntimeException que nÃ£o precisa ser declarada na
  * clausula "throws" do mos metodos.
  * 
- * Obs: Note que você deve utilizar a estrutura de dados array e não
- * implementações de array prontas da API Collections de Java (como ArrayList,
+ * Obs: Note que vocÃª deve utilizar a estrutura de dados array e nÃ£o
+ * implementaÃ§Ãµes de array prontas da API Collections de Java (como ArrayList,
  * por exemplo).
  * 
  * @author Adalberto
@@ -22,7 +22,7 @@ public class RepositorioProdutoNaoPerecivelArray {
 
 	/**
 	 * A posicao do ultimo elemento inserido no array de produtos. o valor
-	 * inicial é -1 para indicar que nenhum produto foi ainda guardado no array.
+	 * inicial Ã© -1 para indicar que nenhum produto foi ainda guardado no array.
 	 */
 	private int index = -1;
 
@@ -33,9 +33,9 @@ public class RepositorioProdutoNaoPerecivelArray {
 
 	/**
 	 * Recebe o codigo do produto e devolve o indice desse produto no array ou
-	 * -1 caso ele nao se encontre no array. Esse método é util apenas na
+	 * -1 caso ele nao se encontre no array. Esse mÃ©todo Ã© util apenas na
 	 * implementacao com arrays por questoes de localizacao. Outras classes que
-	 * utilizam outras estruturas internas podem nao precisar desse método.
+	 * utilizam outras estruturas internas podem nao precisar desse mÃ©todo.
 	 * 
 	 * @param codigo
 	 * @return
@@ -71,18 +71,19 @@ public class RepositorioProdutoNaoPerecivelArray {
 	 */
 	public void inserir(ProdutoNaoPerecivel produto) {
 		int i = 0;
-		while(produtos[i].getNome() != null && i < produtos.length) {
+		while(i < produtos.length && produtos[i] != null) {
 			i += 1;
 		}
-		if (i == produtos.length - 1) {
+		if (i == produtos.length) {
 			expandir();
 			i += 1;
 		}
 		this.produtos[i] = produto;
+		this.index += 1;
 	}
 	
 	/*
-	 * Método auxiliar para expansao do Array
+	 * Metodo auxiliar para expansao do Array
 	 */
 	private void expandir() {
 		ProdutoNaoPerecivel[] novo = new ProdutoNaoPerecivel[produtos.length * 2];
@@ -94,7 +95,7 @@ public class RepositorioProdutoNaoPerecivelArray {
 
 	/**
 	 * Atualiza um produto armazenado ou retorna um erro caso o produto nao
-	 * esteja no array. Note que, para localizacao, o código do produto será
+	 * esteja no array. Note que, para localizacao, o cÃ³digo do produto serÃ¡
 	 * utilizado.
 	 */
 	public void atualizar(ProdutoNaoPerecivel produto) {
@@ -118,8 +119,30 @@ public class RepositorioProdutoNaoPerecivelArray {
 	 * @param codigo
 	 */
 	public void remover(int codigo) {
-		// TODO Implement your code here
-		throw new UnsupportedOperationException("Not implemented yet!");
+		int i = 0;
+		while (i < produtos.length && produtos[i].getCodigo() != codigo) {
+			i += 1;
+		}
+		if (i == produtos.length) {
+			throw new RuntimeException();
+		}
+		produtos[i] = null;
+		organizar();
+		this.index -= 1;
+	}
+	
+	/**
+	 * Metodo auxiliar para organizar o array retirando os "buracos"
+	 */
+	private void organizar() {
+		int i = 0;
+		while(i < produtos.length && produtos[i] != null) {
+			i += 1;
+		}
+		produtos[i] = produtos[i + 1];
+		for (int j = i + 1; j < produtos.length - 1; j++) {
+			produtos[j] = produtos[j + 1];
+		}
 	}
 
 	/**
@@ -130,8 +153,13 @@ public class RepositorioProdutoNaoPerecivelArray {
 	 * @return
 	 */
 	public ProdutoNaoPerecivel procurar(int codigo) {
-		// TODO Implement your code here
-		throw new UnsupportedOperationException("Not implemented yet!");
+		int i = 0;
+		while (i < produtos.length && produtos[i].getCodigo() != codigo) {
+			i += 1;
+		}
+		if (i == produtos.length) {
+			throw new RuntimeException();
+		}
+		return produtos[i];
 	}
-
 }
