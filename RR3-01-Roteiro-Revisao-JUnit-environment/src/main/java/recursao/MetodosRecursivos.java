@@ -2,12 +2,20 @@ package recursao;
 
 public class MetodosRecursivos {
 
-	public int calcularSomaArray(int[] array){
+	public int calcularSomaArray(int[] array) {
 		int result = 0;
 		// TODO ESCREVA AQUI O CÓDIGO (USANDO RECURSAO) PARA CALCULAR A SOMA
 		// DOS EMENTOS DE UM ARRAY
-		return result;
+		return result = this.somaArray(array, 0);
 	}
+
+	private int somaArray(int[] array, int indice) {
+		if (indice == array.length - 1) {
+			return array[indice];
+		}
+		return this.somaArray(array, indice + 1);
+	}
+
 	public long calcularFatorial(int n) {
 		long result = 1;
 		// TODO ESCREVA AQUI O CÓDIGO (USANDO RECURSAO) PARA CALCULAR E IMPRIMIR
@@ -15,7 +23,14 @@ public class MetodosRecursivos {
 		// DE ACORDO COM O QUE FOI MOSTRADO NO EXERCCICIO. OBSERVE QUE SENDO O
 		// METODO
 		// RECURSIVO, O FATORIAL DOS NUMEROS ANTERIORES TAMBEM VAO SER IMPRESSOS
-		return result;
+		return result += result * this.fatorial(n);
+	}
+
+	private long fatorial(int valor) {
+		if (valor == 1) {
+			return valor;
+		}
+		return this.fatorial(valor - 1);
 	}
 
 	public int calcularFibonacci(int n) {
@@ -63,6 +78,5 @@ public class MetodosRecursivos {
 		// DA PROGRESSAO GEOMETRICA, DADO O TERMO INICIAL E A RAZAO
 		return result;
 	}
-	
-	
+
 }

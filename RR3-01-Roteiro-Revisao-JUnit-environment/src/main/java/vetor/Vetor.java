@@ -40,27 +40,41 @@ public class Vetor {
 
 	// Insere um objeto no vetor
 	public void inserir(Object o) {
-
+		this.arrayInterno[indice] = o;
+		this.indice += 1;
 	}
 
 	// Remove um objeto do vetor
 	public Object remover() {
+		this.arrayInterno[indice-1] = null;
+		this.indice -= 1;
 		return null;
 	}
 
 	// Procura um elemento no vetor
 	public Object procurar(Object o) {
-		return null;
+		int i = 0;
+		while (i < arrayInterno.length && !arrayInterno.equals(o)) {
+			i += 1;
+		}
+		return arrayInterno[i];
 	}
 
 	// Diz se o vetor está vazio
 	public boolean isVazio() {
-		return false;
+		boolean vazio = false;
+		if (this.indice == 0) {
+			vazio = true;
+		}
+		return vazio;
 	}
 
 	// Diz se o vetor está cheio
 	public boolean isCheio() {
-		return false;
+		boolean cheio = false;
+		if (this.indice == this.arrayInterno.length) {
+			cheio = true;
+		}
+		return cheio;
 	}
-
 }
