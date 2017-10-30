@@ -42,8 +42,14 @@ public class RepositorioProdutoPerecivelArray {
 	 * @return
 	 */
 	private int procurarIndice(int codigo) {
-		// TODO Implement your code here
-		throw new UnsupportedOperationException("Not implemented yet!");
+		int i = 0;
+		while (i < produtos.length && produtos[i].getCodigo() != codigo) {
+			i += 1;
+		}
+		if (i == produtos.length) {
+			i = -1;
+		}
+		return i;
 	}
 
 	/**
@@ -53,16 +59,27 @@ public class RepositorioProdutoPerecivelArray {
 	 * @return
 	 */
 	public boolean existe(int codigo) {
-		// TODO Implement your code here
-		throw new UnsupportedOperationException("Not implemented yet!");
+		boolean saida = false;
+		int i = 0;
+		while (i < produtos.length && produtos[i].getCodigo() != codigo) {
+			i += 1;
+		}
+		if (i != produtos.length) {
+			saida = true;
+		}
+		return saida;
 	}
 
 	/**
 	 * Insere um novo produto (sem se preocupar com duplicatas)
 	 */
 	public void inserir(ProdutoPerecivel produto) {
-		// TODO Implement your code here
-		throw new UnsupportedOperationException("Not implemented yet!");
+		int i = 0;
+		while (i < produtos.length && produtos[i] != null) {
+			i += 1;
+		}
+		this.produtos[i] = produto;
+		this.index += 1;
 	}
 
 	/**
@@ -71,8 +88,11 @@ public class RepositorioProdutoPerecivelArray {
 	 * utilizado.
 	 */
 	public void atualizar(ProdutoPerecivel produto) {
-		// TODO Implement your code here
-		throw new UnsupportedOperationException("Not implemented yet!");
+		if (!existe(produto.getCodigo())) {
+			throw new RuntimeException();
+		}
+		int indice = procurarIndice(produto.getCodigo());
+		produtos[indice] = produto;
 	}
 
 	/**
@@ -83,8 +103,24 @@ public class RepositorioProdutoPerecivelArray {
 	 * @param codigo
 	 */
 	public void remover(int codigo) {
-		// TODO Implement your code here
-		throw new UnsupportedOperationException("Not implemented yet!");
+		if (!existe(codigo)) {
+			throw new RuntimeException();
+		}
+		int indice = procurarIndice(codigo);
+		produtos[indice] = null;
+		organizar();
+		this.index -= 1;
+	}
+
+	private void organizar() {
+		int i = 0;
+		while (i < produtos.length && produtos[i] != null) {
+			i += 1;
+		}
+		produtos[i] = produtos[i + 1];
+		for (int j = 0; j < produtos.length - 1; j++) {
+			produtos[j] = produtos[j + 1];
+		}
 	}
 
 	/**
@@ -95,7 +131,10 @@ public class RepositorioProdutoPerecivelArray {
 	 * @return
 	 */
 	public ProdutoPerecivel procurar(int codigo) {
-		// TODO Implement your code here
-		throw new UnsupportedOperationException("Not implemented yet!");
+		if (!existe(codigo)) {
+			throw new RuntimeException();
+		}
+		int indice = procurarIndice(codigo);
+		return produtos[indice];
 	}
 }
