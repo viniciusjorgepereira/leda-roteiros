@@ -45,9 +45,7 @@ public class StackImpl<T> implements Stack<T> {
 		}
 		if (element != null) {
 			top += 1;
-			if (!isFull()) {
-				this.array[top] = element;
-			}
+			this.array[top] = element;
 		}
 	}
 
@@ -56,7 +54,7 @@ public class StackImpl<T> implements Stack<T> {
 		if (isEmpty()) {
 			throw new StackUnderflowException();
 		} else {
-//			this.top -= 1;
+			// this.top -= 1;
 			return this.array[top--];
 		}
 	}
