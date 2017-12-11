@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2017-12-11T14:15:40.817-0300</date>
+  <logger>VINICIUS JORGE PEREIRA DA SILVA</logger>
+  <level>FINE</level>
+  <message>File 116210568-VINICIUS JORGE PEREIRA DA SILVA.zip was received. It was sent by VINICIUS JORGE PEREIRA DA SILVA from IP 192.168.2.6</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2017-12-11T18:07:52.651-0300</date>
+  <logger>VINICIUS JORGE PEREIRA DA SILVA</logger>
+  <level>FINE</level>
+  <message>File 116210568-VINICIUS JORGE PEREIRA DA SILVA.zip was received. It was sent by VINICIUS JORGE PEREIRA DA SILVA from IP 192.168.2.6</message>
+</record>
