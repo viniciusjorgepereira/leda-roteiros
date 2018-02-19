@@ -50,11 +50,9 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
 	private BSTNode<T> search(T element, BSTNode<T> node) {
 		if (node.isEmpty()) {
 			return node;
-		}
-		if (element.compareTo(node.getData()) < 0) {
+		} else if (element.compareTo(node.getData()) < 0) {
 			return this.search(element, (BSTNode<T>) node.getLeft());
-		}
-		if (element.compareTo(node.getData()) > 0) {
+		} else if (element.compareTo(node.getData()) > 0) {
 			return this.search(element, (BSTNode<T>) node.getRight());
 		} else {
 			return node;
@@ -118,25 +116,15 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
 		BSTNode<T> node = search(element);
 		if (node.isEmpty()) {
 			return null;
-		}
-		if (!node.getRight().isEmpty()) {
+		} else if (!node.getRight().isEmpty()) {
 			return this.minimum(node.getRight());
-		}
-		if (node.getParent().getLeft() == node) {
+		} else if (node.getParent().getLeft() == node) {
 			return (BSTNode<T>) node.getParent();
 		}
-		while (!node.isEmpty() && this.eFilhoDir(node, node.getParent())) {
+		while (!node.isEmpty() && this.irRightChild(node, node.getParent())) {
 			node = (BSTNode<T>) node.getParent();
 		}
 		return (BSTNode<T>) node.getParent();
-	}
-
-	// Indica se o "node" e filho direito do "parent" 
-	private boolean eFilhoDir(BSTNode<T> node, BTNode<T> parent) {
-		if (node == null || node.isEmpty()) {
-			return false;
-		}
-		return parent.getRight() == node;
 	}
 
 	@Override
@@ -144,29 +132,18 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
 		BSTNode<T> node = this.search(element);
 		if (node.isEmpty()) {
 			return null;
-		}
-		if (!node.getLeft().isEmpty()) {
+		} else if (!node.getLeft().isEmpty()) {
 			return this.maximum(node.getLeft());
-		}
-		if (node.getParent().getRight() == node) {
+		} else if (node.getParent().getRight() == node) {
 			return (BSTNode<T>) node.getParent();
 		}
-		while (!node.isEmpty() && this.eFilhoEsq(node, node.getParent())) {
+		while (!node.isEmpty() && this.isLeftChild(node, node.getParent())) {
 			node = (BSTNode<T>) node.getParent();
 		}
 		if (node == this.root) {
 			return null;
 		}
 		return (BSTNode<T>) node.getParent();
-
-	}
-
-	// Indica se o "node" e filho esquerdo do "parent"
-	private boolean eFilhoEsq(BSTNode<T> node, BTNode<T> parent) {
-		if (node == null || node.isEmpty()) {
-			return false;
-		}
-		return parent.getLeft() == node;
 	}
 
 	@Override
@@ -182,27 +159,27 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
 		if (node.isLeaf()) {
 			if (node == this.root) {
 				this.root = new BSTNode<T>();
-			} else if (eFilhoEsq(node, node.getParent())) {
+			} else if (isLeftChild(node, node.getParent())) {
 				node.getParent().setLeft(new BSTNode<T>());
 			} else {
 				node.getParent().setRight(new BSTNode<T>());
 			}
-		} else if (soFilhoDir(node)) {
+		} else if (justRightChild(node)) {
 			if (node == this.root) {
 				this.root = (BSTNode<T>) node.getRight();
 			} else {
-				if (eFilhoEsq(node, node.getParent())) {
+				if (isLeftChild(node, node.getParent())) {
 					node.getParent().setLeft(node.getRight());
 				} else {
 					node.getParent().setRight(node.getRight());
 				}
 				node.getRight().setParent(node.getParent());
 			}
-		} else if (soFilhoEsq(node)) {
+		} else if (justLeftChild(node)) {
 			if (node == this.root) {
 				this.root = (BSTNode<T>) node.getLeft();
 			} else {
-				if (eFilhoEsq(node, node.getParent())) {
+				if (isLeftChild(node, node.getParent())) {
 					node.getParent().setLeft(node.getLeft());
 				} else {
 					node.getParent().setRight(node.getLeft());
@@ -221,16 +198,28 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
 		}
 	}
 
-	// Indica se o "node" passado possui apenas irmao esquerdo
-	private boolean soFilhoEsq(BSTNode<T> node) {
+	private boolean isLeftChild(BSTNode<T> node, BTNode<T> parent) {
+		if (node == null || node.isEmpty()) {
+			return false;
+		}
+		return parent.getLeft() == node;
+	}
+
+	private boolean irRightChild(BSTNode<T> node, BTNode<T> parent) {
+		if (node == null || node.isEmpty()) {
+			return false;
+		}
+		return parent.getRight() == node;
+	}
+
+	protected boolean justLeftChild(BSTNode<T> node) {
 		if (node == null || node.isEmpty()) {
 			return false;
 		}
 		return !node.getLeft().isEmpty() && node.getRight().isEmpty();
 	}
 
-	// Indica se o "node" passado possui apenas irmao direito
-	private boolean soFilhoDir(BSTNode<T> node) {
+	protected boolean justRightChild(BSTNode<T> node) {
 		if (node == null || node.isEmpty()) {
 			return false;
 		}
