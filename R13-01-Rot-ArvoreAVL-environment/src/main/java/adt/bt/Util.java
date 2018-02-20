@@ -12,7 +12,7 @@ public class Util {
 	 */
 	public static <T extends Comparable<T>> BSTNode<T> leftRotation(BSTNode<T> node) {
 		BSTNode<T> pivot = (BSTNode<T>) node.getRight();
-		node.setLeft(pivot.getLeft());
+		node.setRight(pivot.getLeft());
 		pivot.setLeft(node);
 		return pivot;
 	}
@@ -24,7 +24,7 @@ public class Util {
 	 */
 	public static <T extends Comparable<T>> BSTNode<T> rightRotation(BSTNode<T> node) {
 		BSTNode<T> pivot = (BSTNode<T>) node.getLeft();
-		node.setRight(pivot.getRight());
+		node.setLeft(pivot.getRight());
 		pivot.setRight(node);
 		return pivot;
 	}

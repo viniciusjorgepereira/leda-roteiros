@@ -71,13 +71,7 @@ public class AVLTreeImpl<T extends Comparable<T>> extends BSTImpl<T> implements 
 	}
 
 	private boolean pendingRight(BSTNode<T> node) {
-		boolean result;
-		if (height(node) < 0) {
-			result = true;
-		} else {
-			result = false;
-		}
-		return result;
+		return height(node) < 0;
 	}
 
 	private boolean noPending(BSTNode<T> node) {
@@ -85,13 +79,7 @@ public class AVLTreeImpl<T extends Comparable<T>> extends BSTImpl<T> implements 
 	}
 
 	private boolean pendingLeft(BSTNode<T> node) {
-		boolean result;
-		if (height(node) > 0) {
-			result = true;
-		} else {
-			result = false;
-		}
-		return result;
+		return height(node) > 0;
 	}
 
 	@Override
@@ -109,8 +97,9 @@ public class AVLTreeImpl<T extends Comparable<T>> extends BSTImpl<T> implements 
 			insert((BSTNode<T>) node.getLeft(), element, node);
 		} else if (element.compareTo(node.getData()) > 0) {
 			insert((BSTNode<T>) node.getRight(), element, node);
+		} else {
+			rebalance(node);
 		}
-		rebalance(node);
 	}
 
 	@Override
@@ -131,7 +120,6 @@ public class AVLTreeImpl<T extends Comparable<T>> extends BSTImpl<T> implements 
 			} else {
 				node.getParent().setRight(new BSTNode<T>());
 			}
-			rebalanceUp(node);
 		} else if (justRightChild(node)) {
 			if (node == this.root) {
 				this.root = (BSTNode<T>) node.getRight();
@@ -143,7 +131,6 @@ public class AVLTreeImpl<T extends Comparable<T>> extends BSTImpl<T> implements 
 				}
 				node.getRight().setParent(node.getParent());
 			}
-			rebalanceUp(node);
 		} else if (justLeftChild(node)) {
 			if (node == this.root) {
 				this.root = (BSTNode<T>) node.getLeft();
@@ -155,7 +142,6 @@ public class AVLTreeImpl<T extends Comparable<T>> extends BSTImpl<T> implements 
 				}
 				node.getLeft().setParent(node.getParent());
 			}
-			rebalanceUp(node);
 		} else {
 			BSTNode<T> auxNode = this.sucessor(node.getData());
 			if (auxNode == null) {
@@ -165,7 +151,7 @@ public class AVLTreeImpl<T extends Comparable<T>> extends BSTImpl<T> implements 
 			node.setData(auxNode.getData());
 			auxNode.setData(aux);
 			this.remove(auxNode);
-			rebalanceUp(node);
 		}
+		rebalanceUp(node);
 	}
 }
