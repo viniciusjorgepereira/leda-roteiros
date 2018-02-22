@@ -153,49 +153,47 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
 	}
 
 	private void remove(BSTNode<T> node) {
-		if (node == null || node.isEmpty()) {
-			return;
-		}
-		if (node.isLeaf()) {
-			if (node == this.root) {
-				this.root = new BSTNode<T>();
-			} else if (isLeftChild(node, node.getParent())) {
-				node.getParent().setLeft(new BSTNode<T>());
-			} else {
-				node.getParent().setRight(new BSTNode<T>());
-			}
-		} else if (justRightChild(node)) {
-			if (node == this.root) {
-				this.root = (BSTNode<T>) node.getRight();
-			} else {
-				if (isLeftChild(node, node.getParent())) {
-					node.getParent().setLeft(node.getRight());
+		if (!node.isEmpty()) {
+			if (node.isLeaf()) {
+				node.setData(null);
+			} else if (hasOneChild(node)) {
+				if (node.getParent() != null) {
+					if (!node.getParent().getLeft().equals(node)) {
+						if (!node.getLeft().isEmpty()) {
+							node.getParent().setRight(node.getLeft());
+							node.getLeft().setParent(node.getParent());
+						} else {
+							node.getParent().setRight(node.getRight());
+							node.getRight().setParent(node.getParent());
+						}
+					} else {
+						if (!node.getLeft().isEmpty()) {
+							node.getParent().setLeft(node.getLeft());
+							node.getLeft().setParent(node.getParent());
+						} else {
+							node.getParent().setLeft(node.getRight());
+							node.getRight().setParent(node.getParent());
+						}
+					}
 				} else {
-					node.getParent().setRight(node.getRight());
+					if (node.getLeft().isEmpty()) {
+						this.root = (BSTNode<T>) node.getRight();
+					} else {
+						this.root = (BSTNode<T>) node.getLeft();
+					}
+					this.root.setParent(null);
 				}
-				node.getRight().setParent(node.getParent());
-			}
-		} else if (justLeftChild(node)) {
-			if (node == this.root) {
-				this.root = (BSTNode<T>) node.getLeft();
 			} else {
-				if (isLeftChild(node, node.getParent())) {
-					node.getParent().setLeft(node.getLeft());
-				} else {
-					node.getParent().setRight(node.getLeft());
-				}
-				node.getLeft().setParent(node.getParent());
+				T sucessor = sucessor(node.getData()).getData();
+				remove(sucessor);
+				node.setData(sucessor);
 			}
-		} else {
-			BSTNode<T> auxNode = this.sucessor(node.getData());
-			if (auxNode == null) {
-				auxNode = this.predecessor(node.getData());
-			}
-			T aux = node.getData();
-			node.setData(auxNode.getData());
-			auxNode.setData(aux);
-			this.remove(auxNode);
 		}
+	}
+
+	protected boolean hasOneChild(BSTNode<T> node) {
+		return (node.getLeft().isEmpty() && !node.getRight().isEmpty())
+				|| (!node.getLeft().isEmpty() && node.getRight().isEmpty());
 	}
 
 	protected boolean isLeftChild(BSTNode<T> node, BTNode<T> parent) {

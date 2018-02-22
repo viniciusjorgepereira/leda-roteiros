@@ -22,7 +22,7 @@ public class AVLTreeImpl<T extends Comparable<T>> extends BSTImpl<T> implements 
 		if (!node.isEmpty()) {
 			return height((BSTNode<T>) node.getLeft()) - height((BSTNode<T>) node.getRight());
 		} else {
-			return 1;
+			return 0;
 		}
 	}
 
@@ -50,15 +50,15 @@ public class AVLTreeImpl<T extends Comparable<T>> extends BSTImpl<T> implements 
 		BSTNode<T> aux = null;
 
 		if (balance > 0) {
-			if (calculateBalance((BSTNode<T>) root.getLeft()) < 0) {
+			if (pendingLeft((BSTNode<T>) root.getLeft())) {
 				root.setLeft(Util.leftRotation((BSTNode<T>) root.getLeft()));
 			}
 			aux = Util.rightRotation(root);
 		} else {
-			if (calculateBalance((BSTNode<T>) root.getRight()) > 0) {
+			if (pendingRight((BSTNode<T>) root.getRight())) {
 				root.setRight(Util.rightRotation((BSTNode<T>) root.getRight()));
 			}
-			aux = Util.rightRotation(root);
+			aux = Util.leftRotation(root);
 		}
 
 		if (this.root.equals(root)) {
@@ -70,39 +70,10 @@ public class AVLTreeImpl<T extends Comparable<T>> extends BSTImpl<T> implements 
 				aux.getParent().setRight(aux);
 			}
 		}
-
-		// Left-left || Condicao 1
-		// Rotacao para direita
-		// if ((pendingLeft(root) && pendingLeft((BSTNode<T>) root.getLeft()))
-		// || (pendingLeft(root) && noPending((BSTNode<T>) root.getLeft()))) {
-		// Util.rightRotation(root);
-		// }
-		// Right-right || Condicao 2
-		// Rotacao para esquerda
-		// else if ((pendingRight(root) && pendingRight((BSTNode<T>) root.getRight()))
-		// || (pendingRight(root) && noPending((BSTNode<T>) root.getRight()))) {
-		// Util.leftRotation(root);
-		// }
-		// Left-right || Condicao 3
-		// Rotacao Esquerda no Filho e Direita no Pai
-		// else if (pendingLeft(root) && pendingRight((BSTNode<T>) root.getLeft())) {
-		// Util.rightRotation(root);
-		// Util.leftRotation((BSTNode<T>) root.getLeft());
-		// }
-		// Right-left || Condicao 4
-		// Rotacao Direita no Filho e Esquerda no Pai
-		// else if (pendingRight(root) && pendingLeft((BSTNode<T>) root.getRight())) {
-		// Util.leftRotation(root);
-		// Util.rightRotation((BSTNode<T>) root.getRight());
-		// }
 	}
 
 	private boolean pendingRight(BSTNode<T> node) {
 		return height(node) < 0;
-	}
-
-	private boolean noPending(BSTNode<T> node) {
-		return !pendingLeft(node) && !pendingRight(node);
 	}
 
 	private boolean pendingLeft(BSTNode<T> node) {
@@ -113,7 +84,7 @@ public class AVLTreeImpl<T extends Comparable<T>> extends BSTImpl<T> implements 
 	public void insert(T element) {
 		if (element != null) {
 			insert(this.root, element, new BSTNode<>());
-			this.rebalanceUp(search(element));
+			this.rebalance(search(element));
 		}
 	}
 
@@ -137,48 +108,48 @@ public class AVLTreeImpl<T extends Comparable<T>> extends BSTImpl<T> implements 
 	}
 
 	private void remove(BSTNode<T> node) {
-		if (node != null && !node.isEmpty()) {
+		if (!node.isEmpty()) {
 			if (node.isLeaf()) {
-				if (node == this.root) {
-					this.root = new BSTNode<T>();
-				} else if (isLeftChild(node, node.getParent())) {
-					node.getParent().setLeft(new BSTNode<T>());
-				} else {
-					node.getParent().setRight(new BSTNode<T>());
-				}
-			} else if (justRightChild(node)) {
-				if (node == this.root) {
-					this.root = (BSTNode<T>) node.getRight();
-				} else {
-					if (isRightChild(node, node.getParent())) {
-						node.getParent().setLeft(node.getRight());
+				node.setData(null);
+				this.rebalanceUp(node);
+			} else if (hasOneChild(node)) {
+				if (node.getParent() != null) {
+					if (!node.getParent().getLeft().equals(node)) {
+						if (!node.getLeft().isEmpty()) {
+							node.getParent().setRight(node.getLeft());
+							node.getLeft().setParent(node.getParent());
+						} else {
+							node.getParent().setRight(node.getRight());
+							node.getRight().setParent(node.getParent());
+						}
 					} else {
-						node.getParent().setRight(node.getRight());
+						if (!node.getLeft().isEmpty()) {
+							node.getParent().setLeft(node.getLeft());
+							node.getLeft().setParent(node.getParent());
+						} else {
+							node.getParent().setLeft(node.getRight());
+							node.getRight().setParent(node.getParent());
+						}
 					}
-					node.getRight().setParent(node.getParent());
-				}
-			} else if (justLeftChild(node)) {
-				if (node == this.root) {
-					this.root = (BSTNode<T>) node.getLeft();
 				} else {
-					if (isLeftChild(node, node.getParent())) {
-						node.getParent().setLeft(node.getLeft());
+					if (node.getLeft().isEmpty()) {
+						this.root = (BSTNode<T>) node.getRight();
 					} else {
-						node.getParent().setRight(node.getLeft());
+						this.root = (BSTNode<T>) node.getLeft();
 					}
-					node.getLeft().setParent(node.getParent());
+					this.root.setParent(null);
 				}
+				this.rebalanceUp(node);
 			} else {
-				BSTNode<T> auxNode = this.sucessor(node.getData());
-				if (auxNode == null) {
-					auxNode = this.predecessor(node.getData());
-				}
-				T aux = node.getData();
-				node.setData(auxNode.getData());
-				auxNode.setData(aux);
-				this.remove(auxNode);
+				T sucessor = sucessor(node.getData()).getData();
+				remove(sucessor);
+				node.setData(sucessor);
 			}
-			this.rebalanceUp(node);
 		}
+	}
+
+	protected boolean hasOneChild(BSTNode<T> node) {
+		return (node.getLeft().isEmpty() && !node.getRight().isEmpty())
+				|| (!node.getLeft().isEmpty() && node.getRight().isEmpty());
 	}
 }
