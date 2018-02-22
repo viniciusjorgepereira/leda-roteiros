@@ -14,6 +14,8 @@ public class Util {
 		BSTNode<T> pivot = (BSTNode<T>) node.getRight();
 		node.setRight(pivot.getLeft());
 		pivot.setLeft(node);
+		pivot.setParent(node.getParent());
+		node.setParent(pivot);
 		return pivot;
 	}
 
@@ -26,6 +28,8 @@ public class Util {
 		BSTNode<T> pivot = (BSTNode<T>) node.getLeft();
 		node.setLeft(pivot.getRight());
 		pivot.setRight(node);
+		pivot.setParent(node.getParent());
+		node.setParent(pivot);
 		return pivot;
 	}
 

@@ -38,10 +38,9 @@ public class AVLTreeImpl<T extends Comparable<T>> extends BSTImpl<T> implements 
 
 	// AUXILIARY
 	protected void rebalanceUp(BSTNode<T> node) {
-		BSTNode<T> parent = (BSTNode<T>) node.getParent();
-		while (!parent.isEmpty()) {
-			rebalance((BSTNode<T>) parent);
-			parent = (BSTNode<T>) parent.getParent();
+		while (!node.isEmpty()) {
+			rebalance((BSTNode<T>) node);
+			node = (BSTNode<T>) node.getParent();
 		}
 	}
 
@@ -83,7 +82,7 @@ public class AVLTreeImpl<T extends Comparable<T>> extends BSTImpl<T> implements 
 	public void insert(T element) {
 		if (element != null) {
 			insert(this.root, element, new BSTNode<>());
-			this.rebalance(search(element));
+			this.rebalanceUp(search(element));
 		}
 	}
 

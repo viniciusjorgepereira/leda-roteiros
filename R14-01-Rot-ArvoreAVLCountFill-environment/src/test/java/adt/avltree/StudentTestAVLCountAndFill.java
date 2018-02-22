@@ -23,7 +23,6 @@ public class StudentTestAVLCountAndFill {
 			tree2.insert(SIZE - i);
 		}
 		
-
 		tree3 = new AVLCountAndFillImpl<Integer>();
 		Integer[] data = { 8, 4, 6, 12, 10 };
 		for (Integer integer : data) {
