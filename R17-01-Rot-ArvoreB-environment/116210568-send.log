@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2018-03-05T14:13:12.864-0300</date>
+  <logger>VINICIUS JORGE PEREIRA DA SILVA</logger>
+  <level>FINE</level>
+  <message>File 116210568-VINICIUS JORGE PEREIRA DA SILVA.zip was received. It was sent by VINICIUS JORGE PEREIRA DA SILVA from IP 192.168.0.104</message>
+</record>
